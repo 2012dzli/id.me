@@ -1,0 +1,37 @@
+<html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script>
+//check session status
+var checkLoginStatus = function (){
+	$.ajax({
+	  url: "/session-ready?" + Math.random(),
+	  success: function(data) {
+		if (data.status == "login" || data.status == "process") { //need to redirect user to id.me to login
+		    document.location = "https://api.id.me/oauth/authorize?client_id=dcfee6672461ec22b5420690855dfd5c&redirect_uri=http%3A%2F%2F54.164.122.53%2Fid.me.callback&response_type=token&scope=military";
+		} else if (data.status == "error") {
+			$("#errorDiv").show();
+			$("#errorMsg").html(data.message);
+		} else if (data.status == "success") {
+			if (data.affiliation == "Veteran")
+				document.location = "/" + data.affiliation + "?email=" + data.email ;
+			else 
+				document.location = "/Other?email=" + data.email;
+		}
+	  }
+	});
+};
+
+$(document).ready(checkLoginStatus);
+
+</script>
+</head>
+<body>
+
+<div id="errorDiv" class = "alert alert-danger" style="display:none;">
+  <p><b>Error:</b> <span id="errorMsg"></span></p> 
+</div>
+
+</body>
+</html>

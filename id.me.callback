@@ -1,0 +1,4 @@
+<script>
+  var url = document.location.href;
+  document.location = url.replace("id.me.callback#access_token","id.me.callback2?access_token");
+</script>
